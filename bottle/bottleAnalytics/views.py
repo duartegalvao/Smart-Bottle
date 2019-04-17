@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
-# Create your views here.
+from bottleAnalytics.models import BottleReading
 
 def index(request):
     return HttpResponse("This is the bottle index.")
@@ -9,6 +8,10 @@ def index(request):
 # Comes from the bottle
 def bottleUpdate(request):
     # TODO Update BottleStats with the readings received in the request
+    newBottleReading = BottleReading()
+    newBottleReading.temp = 77
+    newBottleReading.weight = 78
+    newBottleReading.save()
     return HttpResponse("BottleStats has been updated")
 
 # Comes from the user
