@@ -103,3 +103,6 @@ bottle-env/
 
 # mypy
 .mypy_cache/
+
+# vim
+*.swp
