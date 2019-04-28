@@ -1,6 +1,17 @@
 import numpy as np
 
 
+def classify(data):
+    """Get raw data and return the final score."""
+    w_stable = find_stable_points(data)
+    consumption = get_consumption(w_stable)
+    score = calculate_score(consumption, data)
+
+    return score
+
+
+# Auxiliary functions
+
 def find_stable_points(w_raw, var_threshold=0.1, min_stable_samples=3):
     """Return list of stable weight points."""
     run_w = []
@@ -22,6 +33,7 @@ def find_stable_points(w_raw, var_threshold=0.1, min_stable_samples=3):
 
 
 def get_consumption(w_stable):
+    """Return total consumption value."""
     consumption = 0
     prev_w = None
 
@@ -34,15 +46,13 @@ def get_consumption(w_stable):
 
 
 def calculate_score(consumption, temperatures):
+    """Return final score based on consumption and temperatures"""
     score = 0
-    # TODO
 
-    return score
+    def softmax(x):
+        return np.exp(x) / np.sum(np.exp(x))
 
-
-def classify(data):
-    w_stable = find_stable_points(data)
-    consumption = get_consumption(w_stable)
-    score = calculate_score(consumption, data)
+    temperature = np.mean(temperatures)
+    score = softmax(consumption / temperature)
 
     return score
