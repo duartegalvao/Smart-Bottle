@@ -1,11 +1,17 @@
 import numpy as np
 
 
-def classify(data):
-    """Get raw data and return the final score."""
-    w_stable = find_stable_points(data)
+def classify(readings):
+    """Get raw data and return the final score.
+
+    Usage example: classify(BottleReading.objects.filter(time__gte=date_24h_ago).order_by('time'))
+    """
+    temp = readings.values_list('temp', flat=True)
+    w_raw = readings.values_list('weight', flat=True)
+
+    w_stable = find_stable_points(w_raw)
     consumption = get_consumption(w_stable)
-    score = calculate_score(consumption, data)
+    score = calculate_score(consumption, temp)
 
     return score
 
@@ -47,12 +53,7 @@ def get_consumption(w_stable):
 
 def calculate_score(consumption, temperatures):
     """Return final score based on consumption and temperatures"""
-    score = 0
-
-    def softmax(x):
-        return np.exp(x) / np.sum(np.exp(x))
-
     temperature = np.mean(temperatures)
-    score = softmax(consumption / temperature)
+    score = consumption / temperature
 
     return score
