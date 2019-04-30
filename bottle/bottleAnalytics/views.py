@@ -18,6 +18,7 @@ def bottleUpdate(request):
     newBottleReading = BottleReading()
     newBottleReading.temp = request.POST.get('temp')
     newBottleReading.weight = request.POST.get('weight')
+    newBottleReading.time = request.POST.get('time')
     newBottleReading.save()
     print("Updated with temp %s and weight %s", newBottleReading.temp, newBottleReading.weight)
     return HttpResponse("BottleStats has been updated")
