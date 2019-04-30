@@ -2,3 +2,6 @@ Django
 django-solo
 numpy
 requests
+jupyter
+matplotlib
+scipy
