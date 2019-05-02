@@ -9,9 +9,9 @@ def index_view(request):
 def analytics_view(request):
     """Shows the current "health status" to the user of the bottle"""
     # TODO Run the "health algorithm" and respond with current health status.
-    return HttpResponse("Your current health status is: ")
+    return render(request, 'bottleAnalytics/analytics.html')
 
 
 def settings_view(request):
-    """Show user's settings"""
-    return HttpResponse("Settings")
+    """Show user's settings and allow them to edit"""
+    return render(request, 'bottleAnalytics/settings.html')
