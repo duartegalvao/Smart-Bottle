@@ -1,10 +1,12 @@
 from django.urls import path
 
-from . import views
+from .views import interface, api
 
 urlpatterns = [
-        path('', views.index, name='index'),
-        path('bottleUpdate', views.bottleUpdate, name='bottleUpdate'),
-#        path('bottleUpdate/<int:temp>/<int:weight>', views.bottleUpdate, name='bottleUpdate'),
-        path('getHealthStatus', views.getHealthStatus, name='getHealthStatus')
-            ]
+    # App Interface
+    path('', interface.index, name='index'),
+    path('getHealthStatus', interface.get_health_status, name='getHealthStatus'),
+
+    # Bottle API
+    path('api/bottleUpdate', api.bottle_update, name='bottleUpdate'),
+]
