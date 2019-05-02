@@ -1,5 +1,6 @@
 Django
 django-solo
+djangorestframework
 numpy
 requests
 jupyter
