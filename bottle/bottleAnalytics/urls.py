@@ -4,9 +4,10 @@ from .views import interface, api
 
 urlpatterns = [
     # App Interface
-    path('', interface.index, name='index'),
-    path('getHealthStatus', interface.get_health_status, name='getHealthStatus'),
+    path('', interface.index_view, name='index'),
+    path('analytics', interface.analytics_view, name='analytics'),
+    path('settings', interface.settings_view, name='settings'),
 
     # Bottle API
-    path('api/bottleUpdate', api.bottle_update, name='bottleUpdate'),
+    path('api/bottleUpdate', api.bottle_update),
 ]
