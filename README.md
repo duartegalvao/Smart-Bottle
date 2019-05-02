@@ -1,11 +1,15 @@
-# UC\_Project
+# Smart Bottle (Ubiquitous Computing Project)
 ## Overview
 
-Project for the ID2012 course on KTH.
+Project for the Ubiquitous Computing (ID2012) course on KTH - Royal Institute of Technology.
 
-## Objective
+### Objective
 
-TODO
+The objectives are described in the project report.
+
+### Team
+
+This project was developed by Duarte Galvão ([@duartegalvao](https://github.com/duartegalvao)) and Pethrus Gärdborn ([@PethrusG](https://github.com/PethrusG)).
 
 ## Issues
 
