@@ -4,9 +4,10 @@ from .models import UserSettings
 
 
 def classify(readings):
-    """Get raw data and return the final score.
-
-    Usage example: classify(BottleReading.objects.filter(time__gte=date_24h_ago).order_by('time'))
+    """
+    Get raw data and return the final score.
+    :param readings: Queryset of reading objects
+    :return score: Score value (A to D, E and O)
     """
     temperatures = readings.values_list('temp', flat=True)
     w_raw = readings.values_list('weight', flat=True)
@@ -15,24 +16,31 @@ def classify(readings):
 
     w_stable = find_stable_points(w_raw)
     consumption = get_consumption(w_stable)
+
+    if consumption < 0.1:
+        return 'E'
+
     ideal_consumption = calculate_ideal_consumption(np.mean(temperatures),
                                                     user_settings.activity_level,
                                                     user_settings.get_age(),
                                                     user_settings.sex)
-    score = calculate_score(consumption, ideal_consumption)
+    score = get_score(consumption, ideal_consumption)
 
     return score
 
 
 # Auxiliary functions
 
-def find_stable_points(w_raw, var_threshold=0.1, min_stable_samples=3):
+def find_stable_points(w_raw, var_threshold=0.1, min_stable_samples=3, min_w=-0.2, max_w=1.2):
     """Return list of stable weight points."""
     run_w = []
     w_stable = []
 
     for w in w_raw:
-        if len(run_w) == 0 or np.var(run_w + [w]) <= var_threshold:
+        if w < min_w or w > max_w:
+            # Discard meaningless weight values
+            continue
+        elif len(run_w) == 0 or np.var(run_w + [w]) <= var_threshold:
             run_w.append(w)
         else:
             if len(run_w) >= min_stable_samples:
@@ -95,8 +103,21 @@ def calculate_ideal_consumption(temperature, activity_level, age, sex):
     return w_cons
 
 
-def calculate_score(consumption, ideal_consumption):
-    """Return final score based on consumption and temperatures."""
-    score = consumption - ideal_consumption
+def get_score(consumption, ideal_consumption):
+    var = np.var([consumption, ideal_consumption])
+
+    if consumption > ideal_consumption:
+        if var > 0.6:
+            score = 'O'
+        else:
+            score = 'A'
+    elif var < 0.2:
+        score = 'A'
+    elif var < 0.5:
+        score = 'B'
+    elif var < 1:
+        score = 'C'
+    else:
+        score = 'D'
 
     return score
