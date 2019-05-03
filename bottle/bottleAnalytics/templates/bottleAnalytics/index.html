@@ -3,4 +3,10 @@
 
 {% block content %}
     Welcome.
+
+    {% if score == 'E' %}
+        No score available.
+    {% else %}
+        Your score is {{ score }}!
+    {% endif %}
 {% endblock %}

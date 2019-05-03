@@ -1,3 +1,6 @@
+import traceback
+from datetime import datetime
+
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -17,7 +20,7 @@ def bottle_update(request):
                 bottle_reading = BottleReading()
                 bottle_reading.temp = data_point['temp']
                 bottle_reading.weight = data_point['weight']
-                bottle_reading.time = data_point['time']
+                bottle_reading.time = datetime.fromtimestamp(data_point['time'])
                 bottle_reading.save()
             except KeyError or TypeError:
                 #  Ignore errors inside batch, accepting all successful
@@ -34,6 +37,7 @@ def bottle_update(request):
             "status": "keyError",
         }, status=status.HTTP_400_BAD_REQUEST)
     except TypeError:
+        print(traceback.format_exc())
         return Response({
             "status": "typeError",
         }, status=status.HTTP_400_BAD_REQUEST)
