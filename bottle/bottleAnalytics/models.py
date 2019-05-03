@@ -15,6 +15,15 @@ SEX_CHOICES = (
     ('F', 'Female'),
 )
 
+SCORE_CHOICES = (
+    ('A', 'Ideal hydration!'),
+    ('B', 'Slightly lower than expected...'),
+    ('C', 'Lower than expected...'),
+    ('D', 'Too low hydration.'),
+    ('E', 'No values available.'),
+    ('O', 'Might be over-hydrating!'),
+)
+
 
 class BottleReading(models.Model):
     temp = models.IntegerField(default=150)
@@ -37,3 +46,10 @@ class UserSettings(SingletonModel):
         else:
             today = date.today()
             return today.year - self.birth_date.year
+
+
+class PreviousScore(models.Model):
+    calculated = models.DateTimeField(auto_now=True)
+    score = models.CharField(max_length=1,
+                             choices=SCORE_CHOICES,
+                             default='E')
