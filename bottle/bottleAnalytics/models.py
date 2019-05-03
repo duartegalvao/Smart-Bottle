@@ -26,8 +26,8 @@ SCORE_CHOICES = (
 
 
 class BottleReading(models.Model):
-    temp = models.IntegerField(default=150)
-    weight = models.IntegerField(default=150)
+    temp = models.FloatField()
+    weight = models.FloatField()
     time = models.DateTimeField(default=datetime.now)
 
 
