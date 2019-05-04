@@ -3,16 +3,15 @@ import numpy as np
 from .models import UserSettings
 
 
-def classify(readings):
+def classify(readings, user_settings):
     """
     Get raw data and return the final score.
     :param readings: Queryset of reading objects
+    :param user_settings: User settings object (singleton)
     :return score: Score value (A to D, E and O)
     """
     temperatures = readings.values_list('temp', flat=True)
     w_raw = readings.values_list('weight', flat=True)
-
-    user_settings = UserSettings.get_solo()
 
     w_stable = find_stable_points(w_raw)
     consumption = get_consumption(w_stable)
@@ -31,17 +30,14 @@ def classify(readings):
 
 # Auxiliary functions
 
-def find_stable_points(w_raw, var_threshold=0.1, min_stable_samples=3, min_w=-0.2, max_w=1.2):
+def find_stable_points(w_raw, var_threshold=0.1, min_stable_samples=3, min_w=0, max_w=1):
     """Return list of stable weight points."""
     run_w = []
     w_stable = []
 
     for w in w_raw:
-        if w < min_w or w > max_w:
-            # Discard meaningless weight values
-            continue
-        elif len(run_w) == 0 or np.var(run_w + [w]) <= var_threshold:
-            run_w.append(w)
+        if len(run_w) == 0 or np.var(run_w + [w]) <= var_threshold:
+            run_w.append(np.clip(w, min_w, max_w))
         else:
             if len(run_w) >= min_stable_samples:
                 w_stable.append(np.mean(run_w))

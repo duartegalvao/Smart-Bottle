@@ -1,54 +1,63 @@
 {% extends "bottleAnalytics/base.html" %}
 {% block title %}Index{% endblock %}
+{% block description %}Welcome to your Smart Bottle!{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-auto">
-                <p class="text-muted">
-                    Welcome to your Smart Bottle!
-                </p>
+    {% if score == 'E' %}
+        <p class="text-center">No score available.</p>
+    {% else %}
+        <div class="container rounded score-badge score-{{ score }}">
+            <div class="row">
+                <div class="col p-3 rounded score-header">
+                    <p class="text-center text-uppercase m-0">
+                        Your score is:
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col py-0 px-5">
+                    <p class="text-center score-value m-0 p-0">
+                        {{ score }}
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col mx-2 my-0 p-2 rounded score-description">
+                    <p class="text-center m-0 p-0">
+                        {% if score == 'O' %}
+                            Your water intake seems higher than expected.
+                            It's probably not cause for alarm, and just an error our
+                            estimation, but make sure to keep in mind that water
+                            overdosing is a real danger.
+                        {% elif score == 'A' %}
+                            Your water intake is right where it's expected!
+                            Keep up being healthy.
+                        {% elif score == 'B' %}
+                            Your water intake seems slightly lower than expected.
+                            It's probably not cause for alarm, and just an error our
+                            estimation, but make sure to keep alert for dehydration symptoms.
+                        {% elif score == 'C' %}
+                            Your water intake seems lower than expected.
+                            It might not be cause for alarm, but make sure to keep alert for
+                            dehydration symptoms.
+                        {% elif score == 'D' %}
+                            Your water intake seems a lot lower than expected.
+                            Try to remind yourself to drink more water trough-out the day
+                            (maybe by keeping the bottle with you at all times), and make
+                            sure to keep alert for dehydration symptoms.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col m-2 p-0 text-center">
+                    <a href="{% url 'refresh-score' %}">
+                        <button type="button" class="btn btn-refresh-score m-0 p-2 text-uppercase" style="width: 100%">
+                            Re-test score!
+                        </button>
+                    </a>
+                </div>
             </div>
         </div>
-        <div class="row justify-content-center">
-            <div class="col-auto">
-                {% if score == 'E' %}
-                    No score available.
-                {% else %}
-                    <div class="container rounded score-badge score-{{ score }}">
-                        <div class="row">
-                            <div class="col p-3 rounded score-header">
-                                <p class="text-center text-uppercase m-0">
-                                    Your score is:
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col py-2 px-5">
-                                <p class="text-center score-value m-0 p-0">
-                                    {{ score }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col m-2 p-2 rounded score-description">
-                                <p class="text-justify m-0 p-0">
-                                    Your score is {{ score }} because something.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col m-2 p-0 text-center">
-                                <a href="{% url 'refresh-score' %}">
-                                    <button type="button" class="btn btn-refresh-score m-0 p-2 text-uppercase" style="width: 100%">
-                                        Re-test score!
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
+    {% endif %}
 {% endblock %}

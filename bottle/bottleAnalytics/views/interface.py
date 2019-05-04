@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 
+from django.contrib import messages
+from django.forms import modelform_factory, SelectDateWidget
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
@@ -17,6 +19,9 @@ def index_view(request):
     else:
         score = create_score()
 
+    if UserSettings.get_solo().birth_date is None:
+        messages.warning(request, "Don't forget to define your personal settings for more accurate results!")
+
     return render(request, 'bottleAnalytics/index.html', context={
         'score': score,
     })
@@ -32,9 +37,13 @@ def analytics_view(request):
 
 class SettingsUpdate(UpdateView):
     model = UserSettings
-    fields = ['birth_date', 'activity_level', 'sex']
     get_object = model.get_solo
     success_url = reverse_lazy('index')
+    form_class = modelform_factory(model,
+                                   exclude=[],
+                                   widgets={
+                                        'birth_date': SelectDateWidget(years=range(1900, datetime.now().year))
+                                    })
 
 
 def refresh_score_view(request):
@@ -47,7 +56,7 @@ def create_score():
     readings = BottleReading.objects \
         .filter(time__gte=datetime.now() - timedelta(days=1)) \
         .order_by('time')
-    score = classify(readings)
+    score = classify(readings, UserSettings.get_solo())
     if score != 'E':
         PreviousScore.objects.create(score=score)
     return score
