@@ -83,27 +83,61 @@ a.article-title:hover {
   font-size: 2.5rem;
 }
 
-/* added css */
-.totp-box {
-  border-radius: 5px;
-  border: 3px solid #444444;
-  padding: 14px 0px;
+.score-badge {
+  border: 1px solid #d6d6d6;
 }
 
-.totp-code {
-  font-size: 22px;
+.score-header {
+  background-color: #305885;
+  border: 2px solid #428bca;
+  color: #fafafa;
+  font-family: 'Oswald', sans-serif;
+  font-size: large;
+}
+
+.score-value {
+  font-size: 120pt;
+  font-family: sans-serif;
   font-weight: bold;
+  line-height: normal;
+  text-shadow: 2pt 2pt 10pt rgba(0, 0, 0, 0.5);
 }
 
-hr {
-    border: none;
-    height: 2px;
-    width: 95%;
-    background-color: #444444;
+.score-description {
+  background-color: #fafafa;
+  border: 1px solid #d6d6d6;
+  width: 200pt;
+  color: #333333;
+  font-size: small;
 }
 
-.submitSIRSBtn {
-  display: block;
-  width: 100%;
-  margin: 0 auto;
+.score-O {
+  background-color: #98CE00;
+  color: #fafafa;
+}
+
+.score-A {
+  background-color: #98CE00;
+  color: #fafafa;
+}
+
+.score-B {
+  background-color: #98CE00;
+  color: #fafafa;
+}
+
+.score-C {
+  background-color: #98CE00;
+  color: #fafafa;
+}
+
+.score-D {
+  background-color: #98CE00;
+  color: #fafafa;
+}
+
+.btn-refresh-score {
+  background-color: #428bca;
+  color: #fafafa;
+  font-family: 'Oswald', sans-serif;
 }

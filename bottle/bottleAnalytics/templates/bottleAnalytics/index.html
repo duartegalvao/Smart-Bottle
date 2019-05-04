@@ -2,11 +2,53 @@
 {% block title %}Index{% endblock %}
 
 {% block content %}
-    Welcome.
-
-    {% if score == 'E' %}
-        No score available.
-    {% else %}
-        Your score is {{ score }}!
-    {% endif %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <p class="text-muted">
+                    Welcome to your Smart Bottle!
+                </p>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                {% if score == 'E' %}
+                    No score available.
+                {% else %}
+                    <div class="container score-badge score-{{ score }}">
+                        <div class="row">
+                            <div class="col p-3 score-header">
+                                <p class="text-center text-uppercase m-0">
+                                    Your score is:
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col py-2 px-5">
+                                <p class="text-center score-value m-0 p-0">
+                                    {{ score }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col m-2 p-2 score-description">
+                                <p class="text-justify m-0 p-0">
+                                    Your score is {{ score }} because something.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col m-2 p-0 text-center">
+                                <a href="{% url 'refresh-score' %}">
+                                    <button type="button" class="btn btn-refresh-score m-0 p-2 text-uppercase" style="width: 100%">
+                                        Re-test score!
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
