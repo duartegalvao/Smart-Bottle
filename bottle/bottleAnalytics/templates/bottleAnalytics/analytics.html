@@ -1,7 +1,75 @@
 {% extends "bottleAnalytics/base.html" %}
+{% load static %}
 {% block title %}Analytics{% endblock %}
 {% block description %}Review your water intake history here.{% endblock %}
 
 {% block content %}
-    TO DO
+    <div id="weight_chart"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'bottleAnalytics/d3.v5.min.js' %}"></script>
+    <script>
+        var margin = { top: 30, right: 20, bottom: 20, left: 30 }
+            , width = 380 - margin.left - margin.right // Use the window's width
+            , height = 250 - margin.top - margin.bottom; // Use the window's height
+
+        let data_raw = [
+            {% for r in readings %}{"x":{{ r.timestamp }},"y":{{ r.weight }}},{% endfor %}
+        ];
+
+        let data_smooth = [
+            {% for r in readings_s %}{"x":{{ r.t }},"y":{{ r.w }}},{% endfor %}
+        ];
+
+        // 5. X scale will use the index of our data_raw
+        var xScale = d3.scaleLinear()
+            .domain([data_raw[0].x, data_raw[data_raw.length-1].x]) // input
+            .range([0, width]); // output
+
+        // 6. Y scale will use the randomly generate number
+        var yScale = d3.scaleLinear()
+            .domain([0, 1]) // input
+            .range([height, 0]); // output
+
+        // 8. An array of objects of length N. Each object has key -> value pair, the key being "y" and the value is a random number
+        //var dataset = d3.range(n).map(function(d) { return {"y": d3.randomUniform(1)() } })
+
+        // 1. Add the SVG to the page and employ #2
+        var svg = d3.select("#weight_chart").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // 4. Call the y axis in a group tag
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(d3.axisLeft(yScale)); // Create an axis component with d3.axisLeft
+
+        // 3. Call the x axis in a group tag
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(xScale).ticks(0, "d")); // Create an axis component with d3.axisBottom
+
+
+
+        function plot_line(data, yi) {
+            // 9. Append the path, bind the data, and call the line generator
+            svg.append("path")
+                .datum(data) // 10. Binds data to the line
+                .attr("class", "line") // Assign a class for styling
+                .attr("id", "wc_line" + yi)
+                .attr("d",
+                    d3.line()
+                    .x(function (d) { return xScale(d.x); }) // set the x values for the line generator
+                    .y(function (d) { return yScale(d.y); }) // set the y values for the line generator
+                    .curve(d3.curveMonotoneX) // apply smoothing to the line
+                );
+        };
+
+        plot_line(data_raw, 0);
+        plot_line(data_smooth, 1);
+    </script>
 {% endblock %}

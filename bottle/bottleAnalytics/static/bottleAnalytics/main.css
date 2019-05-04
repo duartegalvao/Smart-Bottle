@@ -142,6 +142,25 @@ a.article-title:hover {
   background-color: #305885;
 }
 
+#weight_chart .line {
+  fill: none;
+  stroke: #305885;
+  stroke-width: 2px;
+}
+
+#weight_chart #wc_line1 {
+  stroke: #279015;
+  stroke-width: 4px;
+}
+
+#weight_chart .axis line, #weight_chart .axis path {
+  stroke: #5f788a;
+}
+
+#weight_chart text {
+  fill: #5f788a;
+}
+
 .settings-form {
   border: 2px dotted gray;
 }

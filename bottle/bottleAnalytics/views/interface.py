@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 
-from bottleAnalytics.classify import classify
+from bottleAnalytics.classify import classify, smooth_readings
 from bottleAnalytics.models import BottleReading, PreviousScore, UserSettings
 
 
@@ -29,8 +29,15 @@ def index_view(request):
 
 def analytics_view(request):
     """Shows the current "health status" to the user of the bottle"""
+    readings = BottleReading.objects\
+        .filter(time__gte=datetime.now() - timedelta(days=1)) \
+        .order_by('time')
+    readings_s = smooth_readings(readings)
     p_scores = PreviousScore.objects.all().order_by('-calculated')
+
     return render(request, 'bottleAnalytics/analytics.html', context={
+        'readings': readings,
+        'readings_s': readings_s,
         'scores': p_scores,
     })
 

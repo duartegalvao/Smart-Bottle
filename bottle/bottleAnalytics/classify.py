@@ -28,24 +28,53 @@ def classify(readings, user_settings):
     return score, consumption, ideal_consumption
 
 
+def smooth_readings(readings, var_threshold=0.1, min_stable_samples=3, min_w=0, max_w=1):
+    """Return list of stable weight points."""
+    run_w = []
+    run_t = []
+    w_stable = []
+
+    for r in readings:
+        if len(run_w) == 0 or np.var(run_w + [r.weight]) <= var_threshold:
+            run_w.append(np.clip(r.weight, min_w, max_w))
+            run_t.append(r.timestamp())
+        else:
+            if len(run_w) >= min_stable_samples:
+                w_stable.append({
+                    't': np.median(run_t),
+                    'w': np.median(run_w),
+                })
+            run_w = [r.weight, ]
+            run_t = [r.timestamp(), ]
+
+    # Insert last
+    if len(run_w) >= min_stable_samples:
+        w_stable.append({
+                    't': np.median(run_t),
+                    'w': np.median(run_w),
+                })
+
+    return w_stable
+
+
 # Auxiliary functions
 
 def find_stable_points(w_raw, var_threshold=0.1, min_stable_samples=3, min_w=0, max_w=1):
     """Return list of stable weight points."""
-    run_w = []
+    run = []
     w_stable = []
 
     for w in w_raw:
-        if len(run_w) == 0 or np.var(run_w + [w]) <= var_threshold:
-            run_w.append(np.clip(w, min_w, max_w))
+        if len(run) == 0 or np.var(run + [w]) <= var_threshold:
+            run.append(np.clip(w, min_w, max_w))
         else:
-            if len(run_w) >= min_stable_samples:
-                w_stable.append(np.mean(run_w))
-            run_w = [w, ]
+            if len(run) >= min_stable_samples:
+                w_stable.append(np.median(run))
+            run = [w, ]
 
     # Insert last
-    if len(run_w) >= min_stable_samples:
-        w_stable.append(np.mean(run_w))
+    if len(run) >= min_stable_samples:
+        w_stable.append(np.median(run))
 
     return w_stable
 

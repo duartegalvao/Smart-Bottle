@@ -41,6 +41,3 @@ def bottle_update(request):
         return Response({
             "status": "typeError",
         }, status=status.HTTP_400_BAD_REQUEST)
-
-# TEST bottleUpdate
-# curl --data "temp=10&weight=11" localhost:8000/api/bottleUpdate

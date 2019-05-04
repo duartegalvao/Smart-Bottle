@@ -30,6 +30,9 @@ class BottleReading(models.Model):
     weight = models.FloatField()
     time = models.DateTimeField(default=datetime.now)
 
+    def timestamp(self):
+        return datetime.timestamp(self.time)
+
 
 class UserSettings(SingletonModel):
     birth_date = models.DateField(default=None, blank=True, null=True)
