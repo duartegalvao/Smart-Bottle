@@ -141,3 +141,7 @@ a.article-title:hover {
 .btn-refresh-score:active {
   background-color: #305885;
 }
+
+.settings-form {
+  border: 2px dotted gray;
+}

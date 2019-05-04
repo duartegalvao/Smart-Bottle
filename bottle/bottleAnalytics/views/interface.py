@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta
 
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views.generic import UpdateView
 
 from bottleAnalytics.classify import classify
-from bottleAnalytics.models import BottleReading, PreviousScore
+from bottleAnalytics.models import BottleReading, PreviousScore, UserSettings
 
 
 def index_view(request):
@@ -28,9 +30,11 @@ def analytics_view(request):
     })
 
 
-def settings_view(request):
-    """Show user's settings and allow them to edit"""
-    return render(request, 'bottleAnalytics/settings.html')
+class SettingsUpdate(UpdateView):
+    model = UserSettings
+    fields = ['birth_date', 'activity_level', 'sex']
+    get_object = model.get_solo
+    success_url = reverse_lazy('index')
 
 
 def refresh_score_view(request):
