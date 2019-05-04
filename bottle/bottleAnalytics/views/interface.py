@@ -36,7 +36,7 @@ def settings_view(request):
 def refresh_score_view(request):
     create_score()
     return redirect('index')
-q
+
 
 # Aux fucntions
 def create_score():
