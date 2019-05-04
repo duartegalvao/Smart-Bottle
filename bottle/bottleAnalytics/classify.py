@@ -25,7 +25,7 @@ def classify(readings, user_settings):
                                                     user_settings.sex)
     score = get_score(consumption, ideal_consumption)
 
-    return score
+    return score, consumption, ideal_consumption
 
 
 # Auxiliary functions

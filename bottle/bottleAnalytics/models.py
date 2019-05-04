@@ -53,3 +53,5 @@ class PreviousScore(models.Model):
     score = models.CharField(max_length=1,
                              choices=SCORE_CHOICES,
                              default='E')
+    consumption = models.FloatField(default=0.)
+    ideal_consumption = models.FloatField(default=0.)

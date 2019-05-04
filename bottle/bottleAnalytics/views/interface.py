@@ -56,7 +56,9 @@ def create_score():
     readings = BottleReading.objects \
         .filter(time__gte=datetime.now() - timedelta(days=1)) \
         .order_by('time')
-    score = classify(readings, UserSettings.get_solo())
+    score, consumption, ideal_consumption = classify(readings, UserSettings.get_solo())
     if score != 'E':
-        PreviousScore.objects.create(score=score)
+        PreviousScore.objects.create(score=score,
+                                     consumption=consumption,
+                                     ideal_consumption=ideal_consumption)
     return score

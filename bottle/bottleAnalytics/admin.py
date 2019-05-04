@@ -5,3 +5,4 @@ from . import models
 
 admin.site.register(models.BottleReading)
 admin.site.register(models.UserSettings)
+admin.site.register(models.PreviousScore)
