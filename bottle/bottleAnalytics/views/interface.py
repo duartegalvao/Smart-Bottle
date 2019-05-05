@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 from django.contrib import messages
+from django.db.models import Min, Max
 from django.forms import modelform_factory, SelectDateWidget
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -29,17 +30,31 @@ def index_view(request):
 
 def analytics_view(request):
     """Shows the current "health status" to the user of the bottle"""
-    readings = BottleReading.objects\
-        .filter(time__gte=datetime.now() - timedelta(days=1)) \
-        .order_by('time')
-    readings_s = smooth_readings(readings)
-    p_scores = PreviousScore.objects.all().order_by('-calculated')
+    now = datetime.now()
+    one_day_ago = datetime.now() - timedelta(days=1)
 
-    return render(request, 'bottleAnalytics/analytics.html', context={
-        'readings': readings,
-        'readings_s': readings_s,
-        'scores': p_scores,
-    })
+    readings = BottleReading.objects\
+        .filter(time__gte=one_day_ago) \
+        .order_by('time')
+
+    readings_s = smooth_readings(readings)
+
+    if len(readings_s) > 0:
+        p_scores = PreviousScore.objects.all().order_by('-calculated')
+
+        import numpy as np
+        return render(request, 'bottleAnalytics/analytics.html', context={
+            'readings': readings,
+            'readings_s': readings_s,
+            'min_timestamp': datetime.timestamp(one_day_ago),
+            'max_timestamp': datetime.timestamp(now),
+            'min_temp': np.floor(readings.aggregate(Min('temp'))['temp__min'] - 0.1),
+            'max_temp': np.ceil(readings.aggregate(Max('temp'))['temp__max'] + 0.1),
+            'scores': p_scores,
+        })
+    else:
+        messages.warning(request, "There is no data available.")
+        return render(request, 'bottleAnalytics/analytics.html')
 
 
 class SettingsUpdate(UpdateView):

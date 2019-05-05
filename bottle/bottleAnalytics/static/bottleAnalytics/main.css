@@ -161,6 +161,20 @@ a.article-title:hover {
   fill: #5f788a;
 }
 
+#temp_chart .line {
+  fill: none;
+  stroke: #ce2a00;
+  stroke-width: 3px;
+}
+
+#temp_chart .axis line, #temp_chart .axis path {
+  stroke: #5f788a;
+}
+
+#temp_chart text {
+  fill: #5f788a;
+}
+
 .settings-form {
   border: 2px dotted gray;
 }
