@@ -10,6 +10,10 @@ urlpatterns = [
 
     path('refresh', interface.refresh_score_view, name='refresh-score'),
 
+    path('delete-readings', interface.delete_readings, name='delete-readings'),
+    path('delete-settings', interface.delete_settings, name='delete-settings'),
+    path('delete-all', interface.delete_all, name='delete-all'),
+
     # Bottle API
     path('api/bottleUpdate', api.bottle_update),
 ]

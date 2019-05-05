@@ -1,19 +1,35 @@
 {% extends "bottleAnalytics/base.html" %}
 {% block title %}Settings{% endblock %}
-{% block description %}Edit your personal settings here.{% endblock %}
+{% block description %}Manage your Smart Bottle's settings here.{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-auto settings-form p-3">
-                <form method="post">{% csrf_token %}
-                    {{ form.as_p }}
-                    <p class="text-center m-0">
-                        <a href="{% url 'index' %}"><button type="button" class="btn btn-secondary">Cancel</button></a>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </p>
-                </form>
-            </div>
+    <div class="card bg-light mb-3" style="max-width: 330px;">
+        <div class="card-header"><h5 class="m-0">Personal Settings</h5></div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <p class="text-center m-0">
+                    <a href="{% url 'index' %}"><button type="button" class="btn btn-secondary">Cancel</button></a>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <div class="card text-white bg-danger mb-3" style="max-width: 330px;">
+        <div class="card-header"><h5 class="m-0 text-white">Data Deletion</h5></div>
+        <div class="card-body text-dark bg-light rounded border-danger">
+            <p class="card-text">Take care when performing deletion actions. Deleted data can not be recovered.</p>
+            <p class="mb-3">
+                <a href="{% url 'delete-readings' %}"><button type="button" class="btn btn-warning w-100">Delete all readings and scores</button></a>
+            </p>
+            <p class="mb-3">
+                <a href="{% url 'delete-settings' %}"><button type="button" class="btn btn-warning w-100">Reset my personal settings</button></a>
+            </p>
+            <p class="mb-0">
+                <a href="{% url 'delete-all' %}"><button type="button" class="btn btn-danger w-100">Delete all data</button></a>
+            </p>
         </div>
     </div>
 {% endblock %}

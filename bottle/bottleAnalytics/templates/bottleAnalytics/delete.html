@@ -1,0 +1,20 @@
+{% extends "bottleAnalytics/base.html" %}
+{% block title %}Deleting {{ what_short }}{% endblock %}
+{% block description %}{% endblock %}
+
+{% block content %}
+    <div class="card text-white bg-danger mb-3" style="max-width: 330px;">
+        <div class="card-header"><h5 class="m-0 text-white">Deleting {{ what_short }}</h5></div>
+        <div class="card-body text-dark bg-light rounded border-danger">
+            <form method="post">
+                {% csrf_token %}
+                <p class="card-text">You are about to delete {{ what_long }}. Are you sure you want to proceed?</p>
+                <p class="text-muted">Deleted data can not be recovered.</p>
+                <p class="mb-0 text-center">
+                    <a href="{% url 'settings' %}"><button type="button" class="btn btn-secondary w-50">Cancel</button></a>
+                    <button type="submit" class="btn btn-danger ml-2">Delete all</button>
+                </p>
+            </form>
+        </div>
+    </div>
+{% endblock %}

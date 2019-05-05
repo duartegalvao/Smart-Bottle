@@ -17,7 +17,7 @@ def classify(readings, user_settings):
     consumption = get_consumption(w_stable)
 
     if consumption < 0.1:
-        return 'E'
+        return 'E', 0, 0
 
     ideal_consumption = calculate_ideal_consumption(np.mean(temperatures),
                                                     user_settings.activity_level,

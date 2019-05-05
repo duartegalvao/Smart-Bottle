@@ -45,7 +45,7 @@ def analytics_view(request):
 class SettingsUpdate(UpdateView):
     model = UserSettings
     get_object = model.get_solo
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('refresh-score')
     form_class = modelform_factory(model,
                                    exclude=[],
                                    widgets={
@@ -56,6 +56,42 @@ class SettingsUpdate(UpdateView):
 def refresh_score_view(request):
     create_score()
     return redirect('index')
+
+
+def delete_readings(request):
+    if request.method == 'POST':
+        BottleReading.objects.all().delete()
+        PreviousScore.objects.all().delete()
+        return redirect('index')
+    else:
+        return render(request, 'bottleAnalytics/delete.html', context={
+            'what_short': "Readings",
+            'what_long': "all of your readings and scores",
+        })
+
+
+def delete_settings(request):
+    if request.method == 'POST':
+        UserSettings.get_solo().delete()
+        return redirect('index')
+    else:
+        return render(request, 'bottleAnalytics/delete.html', context={
+            'what_short': "Settings",
+            'what_long': "all of your personal settings",
+        })
+
+
+def delete_all(request):
+    if request.method == 'POST':
+        BottleReading.objects.all().delete()
+        PreviousScore.objects.all().delete()
+        UserSettings.get_solo().delete()
+        return redirect('index')
+    else:
+        return render(request, 'bottleAnalytics/delete.html', context={
+            'what_short': "All Data",
+            'what_long': "all application data",
+        })
 
 
 # Aux fucntions
