@@ -18,7 +18,7 @@ def index_view(request):
     if p_score.exists():
         score = p_score.order_by('-calculated')[0].score
     else:
-        score = create_score()
+        score, _, _ = create_score()
 
     if UserSettings.get_solo().birth_date is None:
         messages.warning(request, "Don't forget to define your personal settings for more accurate results!")
@@ -40,7 +40,7 @@ def analytics_view(request):
     readings_s = smooth_readings(readings)
 
     if len(readings_s) > 0:
-        p_scores = PreviousScore.objects.all().order_by('-calculated')
+        score, consumption, ideal_consumption = create_score()
 
         import numpy as np
         return render(request, 'bottleAnalytics/analytics.html', context={
@@ -50,7 +50,8 @@ def analytics_view(request):
             'max_timestamp': datetime.timestamp(now),
             'min_temp': np.floor(readings.aggregate(Min('temp'))['temp__min'] - 0.1),
             'max_temp': np.ceil(readings.aggregate(Max('temp'))['temp__max'] + 0.1),
-            'scores': p_scores,
+            'consumption': np.round(consumption, 1),
+            'ideal_consumption': np.round(ideal_consumption, 1),
         })
     else:
         messages.warning(request, "There is no data available.")
@@ -119,4 +120,4 @@ def create_score():
         PreviousScore.objects.create(score=score,
                                      consumption=consumption,
                                      ideal_consumption=ideal_consumption)
-    return score
+    return score, consumption, ideal_consumption

@@ -1,11 +1,32 @@
 {% extends "bottleAnalytics/base.html" %}
 {% load static %}
 {% block title %}Analytics{% endblock %}
+{% block pgtitle %} - Analytics{% endblock %}
 {% block description %}Review your water intake over the last 24h here.{% endblock %}
 
 {% block content %}
     <div id="weight_chart"></div>
     <div id="temp_chart"></div>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th scope="row">
+                    Total consumption
+                </th>
+                <td>
+                    ≈{{ consumption }} liters
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    Ideal (target) consumption
+                </th>
+                <td>
+                    ≈{{ ideal_consumption }} liters
+                </td>
+            </tr>
+        </tbody>
+    </table>
 {% endblock %}
 
 {% block scripts %}
@@ -71,7 +92,7 @@
         }
 
         function temp_chart() {
-            let margin = {top: 30, right: 20, bottom: 20, left: 30}
+            let margin = {top: 10, right: 20, bottom: 20, left: 30}
                 , width = 380 - margin.left - margin.right // Use the window's width
                 , height = 100 - margin.top - margin.bottom; // Use the window's height
 
