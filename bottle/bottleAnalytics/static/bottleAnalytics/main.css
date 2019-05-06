@@ -153,26 +153,23 @@ a.article-title:hover {
   stroke-width: 4px;
 }
 
-#weight_chart .axis line, #weight_chart .axis path {
+.axis line, .axis path {
   stroke: #5f788a;
 }
 
-#weight_chart text {
+text {
   fill: #5f788a;
+  font-size: 9pt;
+}
+
+.axis text {
+  font-size: 6pt;
 }
 
 #temp_chart .line {
   fill: none;
   stroke: #ce2a00;
   stroke-width: 3px;
-}
-
-#temp_chart .axis line, #temp_chart .axis path {
-  stroke: #5f788a;
-}
-
-#temp_chart text {
-  fill: #5f788a;
 }
 
 .settings-form {

@@ -41,7 +41,11 @@ def smooth_readings(readings, var_threshold=0.1, min_stable_samples=3, min_w=0, 
         else:
             if len(run_w) >= min_stable_samples:
                 w_stable.append({
-                    't': np.median(run_t),
+                    't': run_t[0],
+                    'w': np.median(run_w),
+                })
+                w_stable.append({
+                    't': run_t[-1],
                     'w': np.median(run_w),
                 })
             run_w = [r.weight, ]
@@ -50,9 +54,13 @@ def smooth_readings(readings, var_threshold=0.1, min_stable_samples=3, min_w=0, 
     # Insert last
     if len(run_w) >= min_stable_samples:
         w_stable.append({
-                    't': np.median(run_t),
+                    't': run_t[0],
                     'w': np.median(run_w),
-                })
+        })
+        w_stable.append({
+            't': run_t[-1],
+            'w': np.median(run_w),
+        })
 
     return w_stable
 
